@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My App</title>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.js"></script>
+  <script src="index.js" defer></script>
+  <style>
+    .completed {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <div id="vue-app">
+
+    <router-view></router-view>
+
+  </div>
+</body>
+</html>
+
+<template id="home-page">
+  <div class="vue-component">
+  <div>
+    <h1 v-for= "task in tasks" v-bind:class="{completed: task.completed}" v-on:click="toggleTask(task)">
+      {{ task.text }}</h1>
+  </div>
+  <div>
+    <h3>Incomplete Tasks: {{ incompleteTasks() }}</h3>
+    <button v-on:click="deleteCompleted()">Remove Completed Tasks</button>
+  </div>
+    <div>
+      <h4>Add Task: <input v-model="newTask.text"></h4>
+    </div>
+    <button v-on:click=addTask()>Add Task</button>
+  </div>
+</template>
