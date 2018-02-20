@@ -6,8 +6,11 @@ class V1::TasksController < ApplicationController
 
   def create
     task = Task.new(text: params[:text], completed: false)
-    task.save
-    render json: task.as_json
+    if task.save
+      render json: task.as_json
+    else
+      render json: {errors: task.errors.full_messages}, status: :unprocessable_entity
+    end
   end
 
   def show

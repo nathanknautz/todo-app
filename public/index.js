@@ -6,7 +6,8 @@ var HomePage = {
       newTask: {
           text: "",
           completed: false
-      }
+      },
+      errors: []
     };
   },
   created: function() {
@@ -16,11 +17,15 @@ var HomePage = {
   },
   methods: {
     addTask: function() {
-      if (this.newTask.text !== "") {
-
-        this.tasks.push(this.newTask);
+      axios.post("/v1/tasks", this.newTask)
+      .then(function(response) {
+        this.tasks.push(response.data);
         this.newTask = {text: "", completed: false};
-      }
+        this.errors = [];
+      }.bind(this))
+      .catch(function(error) {
+        this.errors = error.response.data.errors;
+      }.bind(this));
     },
     toggleTask: function(task) {
       task.completed = !task.completed;
@@ -37,9 +42,17 @@ var HomePage = {
     deleteCompleted: function() {
       for (var index = 0; index < this.tasks.length; index ++) {
         if (this.tasks[index].completed) {
+          axios.delete("/v1/tasks/" + this.tasks[index].id);
           this.tasks.splice(index,1);
         }
       }
+    },
+    updateTask: function(task) {
+      axios.patch("/v1/tasks/" + task.id, this.newTask)
+      .then(function(response) {
+        var index = this.tasks.indexOf(task);
+        this.tasks[index] = this.newTask;
+      }.bind(this));
     }
   },
   computed: {}

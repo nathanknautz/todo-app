@@ -23,9 +23,10 @@
 
 <template id="home-page">
   <div class="vue-component">
-  <div>
-    <h1 v-for= "task in tasks" v-bind:class="{completed: task.completed}" v-on:click="toggleTask(task)">
+  <div v-for= "task in tasks" >
+    <h1 v-bind:class="{completed: task.completed}" v-on:click="toggleTask(task)">
       {{ task.text }}</h1>
+      <button v-on:click="updateTask(task)">Update Task</button>
   </div>
   <div>
     <h3>Incomplete Tasks: {{ incompleteTasks() }}</h3>
@@ -33,6 +34,9 @@
   </div>
     <div>
       <h4>Add Task: <input v-model="newTask.text"></h4>
+      <ul>
+        <li v-for="error in errors"> {{ error }} </li>
+      </ul>
     </div>
     <button v-on:click=addTask()>Add Task</button>
   </div>
